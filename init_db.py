@@ -1,3 +1,6 @@
+# Copyright (c) 2026 SVOIOCHI Team (Hanna Chernobai, Oleksandra Zhurakovska, Maria Vodko). All Rights Reserved.
+# Proprietary and confidential. Unauthorized copying or distribution is strictly prohibited.
+
 import sqlite3
 import pandas as pd
 import json

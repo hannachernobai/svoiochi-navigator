@@ -1,3 +1,6 @@
+# Copyright (c) 2026 SVOIOCHI Team (Hanna Chernobai, Oleksandra Zhurakovska, Maria Vodko). All Rights Reserved.
+# Proprietary and confidential. Unauthorized copying or distribution is strictly prohibited.
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
