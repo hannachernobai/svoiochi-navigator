@@ -1,18 +1,18 @@
-# SVOIOCHI — Інклюзивний мультимодальний навігатор
+# SVOIOCHI — Inclusive Multimodal Navigator
 
-Інклюзивний мультимодальний навігатор на основі відкритих даних міста Чернівці для самостійного та безпечного пересування людей із порушеннями зору.
+An inclusive multimodal navigator powered by Chernivtsi open data, designed for independent and safe urban mobility for people with visual impairments.
 
-## Можливості
-- **Голосовий інтерфейс (Speech-to-Text / Text-to-Voice):** запити про маршрути, міський транспорт і графіки роботи закладів.
-- **Офлайн-маршрутизація:** локальний шар OpenStreetMap (OSM) для Чернівців (~20 МБ), що працює без інтернету.
-- **Візуальне розпізнавання за запитом:** розпізнавання номерів транспорту, вивісок та перешкод.
+## Features
+- **Voice Interface (Speech-to-Text / Text-to-Voice):** Voice queries regarding routes, public transit, and operating hours of local facilities.
+- **Offline Routing:** A local OpenStreetMap (OSM) layer for Chernivtsi (~20 MB) that works completely without an internet connection.
+- **On-Demand Visual Recognition:** Identification of public transit route numbers, street signs, and obstacles.
 
-## Команда проєкту
-- **Олександра** — Team Lead / Hardware Engineer
-- **Марія** — Data Collection & Open Data Processing
-- **Ганна** — Software Engineering (Backend, Speech-to-Text, Offline Routing)
+## Project Team
+- **Oleksandra** — Team Lead / Hardware Engineer
+- **Maria** — Data Collection & Open Data Processing
+- **Hanna** — Software Engineering (Backend, Speech-to-Text, Offline Routing)
 
-## Ліцензія та авторські права (License)
-**© 2026 Команда SVOIOCHI. Усі права захищено (All Rights Reserved).**
+## License & Copyright
+**© 2026 SVOIOCHI Team. All Rights Reserved.**
 
-Цей репозиторій опубліковано у відкритому доступі **виключно для ознайомлення та оцінювання проєкту**. Будь-яке копіювання, модифікація, поширення або використання коду та архітектури без попередньої письмової згоди авторів суворо заборонено. Детальні умови наведено у файлі [LICENSE](./LICENSE).
+This repository is made publicly available **solely for evaluation and review purposes**. Any copying, modification, distribution, or use of the source code and architecture without the explicit prior written permission of the authors is strictly prohibited. Detailed terms can be found in the [LICENSE](./LICENSE) file.
