@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навігатор Чернівці — Доступне місто</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --success: #22c55e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 6px 0;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .mic-container {
+            position: relative;
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* ДІЙСНО ВЕЛИКА КНОПКА */
+        button#recordBtn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            width: 220px;
+            height: 220px;
+            font-size: 24px;
+            font-weight: 800;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button#recordBtn span.icon {
+            font-size: 64px;
+            line-height: 1;
+        }
+
+        button#recordBtn span.text {
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        button#recordBtn:active {
+            transform: scale(0.93);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.7);
+        }
+
+        /* Ефект імпульсу під час запису */
+        .listening {
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 45px rgba(56, 189, 248, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+            }
+        }
+
+        #status {
+            font-size: 17px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+            min-height: 26px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            width: 100%;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .card-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #result {
+            font-size: 17px;
+            line-height: 1.5;
+            color: var(--text-main);
+            min-height: 70px;
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Навігатор Чернівці</h1>
+            <p class="subtitle">Голосовий помічник для незрячих</p>
+        </header>
+
+        <div class="mic-container">
+            <button id="recordBtn">
+                <span class="icon">🎤</span>
+                <span class="text">Говорити</span>
+            </button>
+        </div>
+
+        <div id="status">Натисніть кнопку та скажіть запит</div>
+
+        <div class="card">
+            <div class="card-title">Інструкція маршруту:</div>
+            <div id="result">Очікування голосової команди для Олександри...</div>
+        </div>
+
+        <footer>
+            Чернівецький національний університет • 2026
+        </footer>
+    </div>
+
+    <script>
+        const recordBtn = document.getElementById('recordBtn');
+        const statusDiv = document.getElementById('status');
+        const resultDiv = document.getElementById('result');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            statusDiv.textContent = "Ваш браузер не підтримує голосове керування.";
+            recordBtn.disabled = true;
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'uk-UA';
+            recognition.interimResults = false;
+
+            recordBtn.addEventListener('click', () => {
+                recordBtn.classList.add('listening');
+                statusDiv.textContent = "Слухаю вас, Олександра...";
+                resultDiv.textContent = "...";
+                recognition.start();
+            });
+
+            recognition.onresult = (event) => {
+                recordBtn.classList.remove('listening');
+                const speechText = event.results[0][0].transcript;
+                statusDiv.textContent = "Обробка маршруту...";
+                sendToServer(speechText);
+            };
+
+            recognition.onerror = (event) => {
+                recordBtn.classList.remove('listening');
+                statusDiv.textContent = `Помилка розпізнавання: ${event.error}`;
+            };
+
+            recognition.onend = () => {
+                recordBtn.classList.remove('listening');
+            };
+        }
+
+        function sendToServer(text) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        postData(text, position.coords.latitude, position.coords.longitude);
+                    },
+                    (error) => {
+                        postData(text, 48.2921, 25.9358);
+                    }
+                );
+            } else {
+                postData(text, 48.2921, 25.9358);
+            }
+        }
+
+        function postData(text, lat, lon) {
+const SERVER_URL = "https://couple-prediction-usgs-legislation.trycloudflare.com/api/navigate";
+            fetch(SERVER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query_text: text,
+                    lat: lat,
+                    lng: lon
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusDiv.textContent = "Маршрут побудовано успішно";
+                const answer = data.voice_response || "Маршрут побудовано";
+                resultDiv.textContent = answer;
+
+                speak(answer);
+            })
+            .catch(error => {
+                statusDiv.textContent = "Помилка зв'язку з бекендом!";
+                console.error(error);
+            });
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'uk-UA';
+            utterance.rate = 1.0;
+
+            const voices = window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v =>
+                v.lang.includes('uk') && (
+                    v.name.toLowerCase().includes('female') ||
+                    v.name.toLowerCase().includes('tetiana') ||
+                    v.name.toLowerCase().includes('lesya') ||
+                    v.name.includes('Google') ||
+                    v.name.includes('Microsoft')
+                )
+            );
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
